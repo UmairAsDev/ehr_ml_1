@@ -1,0 +1,14 @@
+artifact_uri: file:///home/umairasdev/Desktop/psoriasis_ML/notebook/mlruns/0/99d452b2dc9e43cbb2095796a2ee88ed/artifacts
+end_time: 1762175682688
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 99d452b2dc9e43cbb2095796a2ee88ed
+run_name: eda_visualization
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1762175682671
+status: 3
+tags: []
+user_id: umairasdev

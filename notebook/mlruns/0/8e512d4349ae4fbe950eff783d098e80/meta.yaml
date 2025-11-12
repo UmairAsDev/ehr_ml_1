@@ -1,0 +1,14 @@
+artifact_uri: file:///home/umairasdev/Desktop/psoriasis_ML/notebook/mlruns/0/8e512d4349ae4fbe950eff783d098e80/artifacts
+end_time: 1762176371023
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 8e512d4349ae4fbe950eff783d098e80
+run_name: flare_model_evaluation
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1762176371006
+status: 3
+tags: []
+user_id: umairasdev

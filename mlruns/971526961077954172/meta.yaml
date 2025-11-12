@@ -1,0 +1,6 @@
+artifact_location: file:///home/umairasdev/Desktop/psoriasis_ML/mlruns/971526961077954172
+creation_time: 1762777291415
+experiment_id: '971526961077954172'
+last_update_time: 1762777291415
+lifecycle_stage: active
+name: flare_detection_pipeline

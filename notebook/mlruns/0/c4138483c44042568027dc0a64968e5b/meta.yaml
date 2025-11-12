@@ -1,0 +1,14 @@
+artifact_uri: file:///home/umairasdev/Desktop/psoriasis_ML/notebook/mlruns/0/c4138483c44042568027dc0a64968e5b/artifacts
+end_time: 1762180480090
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: c4138483c44042568027dc0a64968e5b
+run_name: text_feature_extraction
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1762180479931
+status: 3
+tags: []
+user_id: umairasdev
