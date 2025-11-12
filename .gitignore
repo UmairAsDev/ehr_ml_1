@@ -19,5 +19,4 @@ uv.lock
 
 .vscode
 .marscode
-
-*mlruns
+mlruns/
