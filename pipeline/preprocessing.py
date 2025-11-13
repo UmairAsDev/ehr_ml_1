@@ -6,17 +6,17 @@ import joblib, os
 import numpy as np
 import pandas as pd
 import nest_asyncio
-sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from db.db import get_db
 from typing_extensions import Tuple
 from sklearn.decomposition import TruncatedSVD
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import GroupShuffleSplit
 from sklearn.feature_extraction.text import TfidfVectorizer
-from extract_data import fetch_final_data, get_patient_ids
+from pipeline.extract_data import fetch_final_data, get_patient_ids
 from utils.helper import clean_html, flag_any, mask_post_flare_terms
-# from sklearn.model_selection import train_test_split
-
+import warnings
+warnings.filterwarnings("ignore")
 
 
 
@@ -69,7 +69,6 @@ class FeatureExtraction:
             logger.info(f"columns after dropping the columns: {df.columns}")
             df['noteDate'] = pd.to_datetime(df['noteDate'], errors='coerce')
             df = df.sort_values(['patientId','noteDate']).reset_index(drop=True)
-            # df = df.drop_duplicates(subset=['noteId']) 
             text_cols = ['complaints','pastHistory','assesment','reviewofsystem',
                 'currentmedication','procedure','allergy','examination',
                 'patientSummary','diagnoses']
@@ -132,8 +131,8 @@ class FeatureExtraction:
         except Exception as e:
             logger.error(f"An error occurred in preprocessing: {e}")
             return None
-        
-        
+    
+            
     def split_data(self, df: pd.DataFrame):
         """Split data into train and test sets"""
         logger.info(f"Ready for splitting and finalizing data preparation.......")

@@ -1,6 +1,8 @@
 import pandas as pd
 import logging
 import os
+import sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from preprocessing import FeatureExtraction
 from lightgbm import LGBMClassifier
 import lightgbm as lgb
