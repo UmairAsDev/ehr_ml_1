@@ -5,7 +5,7 @@ import mlflow
 import joblib
 import pandas as pd
 import logging
-from preprocessing import FeatureExtraction
+from pipeline.preprocessing import FeatureExtraction
 from sklearn.metrics import classification_report, roc_auc_score
 from lightgbm import LGBMClassifier
 import lightgbm as lgb

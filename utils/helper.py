@@ -10,7 +10,7 @@ def clean_html(text):
 
 
 def flag_any(t, keywords):
-    print(f"DEBUG: Type of t in flag_any: {type(t)}, Value: {t}")
+    # print(f"DEBUG: Type of t in flag_any: {type(t)}, Value: {t}")
     t = t.lower()
     return int(any(k in t for k in keywords))
 

@@ -76,5 +76,5 @@ def train_model_from_features() -> None:
 
 
 
-# if __name__ == "__main__":
-#     train_model_from_features("6da55e45fa3a4c2b8e29d300bc5ba790")
+if __name__ == "__main__":
+    train_model_from_features()
