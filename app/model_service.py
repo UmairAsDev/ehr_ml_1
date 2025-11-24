@@ -67,7 +67,6 @@ class ModelService:
                 "direction": "↑ flare risk up" if shap_values[0][i] > 0 else "↓ flare risk down"
             })
 
-        # Remove duplicate text_signal entries if hide_svd
         if hide_svd:
             seen = set()
             unique_feats = []
@@ -113,7 +112,7 @@ class ModelService:
 
         for raw in notes:
             result = self.predict_note(raw)
-            # Only keep interpretable features
+    
             filtered_influences = [
                 f for f in result["key_influences"] if f["feature"] in INTERPRETABLE_FEATURES
             ]
@@ -129,7 +128,7 @@ class ModelService:
             flare_labels.append(result["flare_label"])
             flare_scores.append(result["flare_probability"])
 
-        # Aggregate patient-level prediction
+
         if len(flare_labels) == 0:
             final_label = None
             final_probability = None

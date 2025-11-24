@@ -14,13 +14,14 @@ TEXT_FIELDS = ['assesment','complaints','examination','patientSummary','currentm
 
 def preprocess_single(raw_note: dict, tfidf, svd, scaler):
     """
+    
     raw_note: dict with raw columns same shape as original raw dataframe row.
     returns: X_final (1d numpy row), debug dict
     """
-    # Build one-row DataFrame
+
     df = pd.DataFrame([raw_note]).copy()
 
-    # Ensure expected text cols exist and clean
+
     text_cols = ['complaints','pastHistory','assesment','reviewofsystem',
                  'currentmedication','procedure','allergy','examination',
                  'patientSummary','diagnoses']
@@ -59,23 +60,21 @@ def preprocess_single(raw_note: dict, tfidf, svd, scaler):
     df['alcohol_use'] = df['pastHistory'].str.contains("alcohol.*yes", case=False, na=False)
     df['family_melanoma'] = df['pastHistory'].str.contains("melanoma.*yes", case=False, na=False)
 
-    # age extraction same regex and safe cast
     df['patient_age'] = pd.to_numeric(df['patientSummary'].str.extract(r'(\d{1,2})\s*year', expand=False), errors='coerce').fillna(0).astype(float)
 
     # Mask post-flare terms to avoid leakage
     for col in ['assesment','complaints','examination','patientSummary','currentmedication']:
         df[col + '_clean'] = df[col].fillna('').apply(mask_post_flare_terms)
 
-    # Combine text exactly as in training
+
     text_combined = (df['assesment_clean'].fillna('') + ' ' +
                      df['complaints_clean'].fillna('') + ' ' +
                      df['examination_clean'].fillna('')).astype(str)
 
     # TF-IDF -> SVD
     X_text_tfidf = tfidf.transform(text_combined)
-    X_text_svd = svd.transform(X_text_tfidf)  # shape (1, n_svd)
+    X_text_svd = svd.transform(X_text_tfidf)  
 
-    # Ensure numeric columns exist and are in exact same order
     for col in SAFE_NUMERIC_COLS:
         if col not in df.columns:
             df[col] = 0
