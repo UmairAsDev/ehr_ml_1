@@ -23,6 +23,12 @@ ROC-AUC: 0.819104907306434
 
 
 ## installation
-scispacy model:
-can be load through spacy.
-pip install https://s3-us-west-2.amazonaws.com/ai2-s2-scispacy/releases/v0.5.4/en_core_sci_md-0.5.4.tar.gz 
+uv init
+uv venv for #creating environment
+uv sync # if pyproject.toml
+uv lock 
+uv pip install -r requirements.txt
+uv add package name # for new package to install.
+
+
+
