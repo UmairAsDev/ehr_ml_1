@@ -140,21 +140,21 @@ class ModelService:
         if final_probability is not None:
             if final_probability < 0.33:
                 patient_risk = "Low"
-            elif final_probability < 0.67:
+            elif final_probability < 0.50:
                 patient_risk = "Moderate"
+            elif final_probability < 0.67:
+                patient_risk = "Elevated"
             else:
                 patient_risk = "High"
         else:
             patient_risk = "Unknown"
 
-        # Sort notes by probability descending
         risky_notes_sorted = sorted(per_note_results, key=lambda x: x["flare_probability"], reverse=True)
 
         return {
             "patientId": patient_id,
             "total_notes": len(notes),
             "final_flare_label": final_label,
-            "final_flare_probability": round(final_probability, 3) if final_probability is not None else None,
             "final_risk_level": patient_risk,
             "risky_notes": risky_notes_sorted
         }

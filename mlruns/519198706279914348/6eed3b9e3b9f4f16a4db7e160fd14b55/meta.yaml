@@ -1,0 +1,14 @@
+artifact_uri: file:///home/umairasdev/Desktop/psoriasis_ML/mlruns/519198706279914348/6eed3b9e3b9f4f16a4db7e160fd14b55/artifacts
+end_time: 1763988662059
+entry_point_name: ''
+experiment_id: '519198706279914348'
+lifecycle_stage: active
+run_id: 6eed3b9e3b9f4f16a4db7e160fd14b55
+run_name: feature_extraction_and_training
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1763988543499
+status: 3
+tags: []
+user_id: umairasdev

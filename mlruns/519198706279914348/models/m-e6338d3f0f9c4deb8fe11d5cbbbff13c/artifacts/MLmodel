@@ -1,0 +1,21 @@
+artifact_path: file:///home/umairasdev/Desktop/psoriasis_ML/mlruns/519198706279914348/models/m-e6338d3f0f9c4deb8fe11d5cbbbff13c/artifacts
+flavors:
+  lightgbm:
+    code: null
+    data: model.pkl
+    lgb_version: 4.6.0
+    model_class: lightgbm.sklearn.LGBMClassifier
+  python_function:
+    data: model.pkl
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.lightgbm
+    python_version: 3.10.12
+mlflow_version: 3.5.1
+model_id: m-e6338d3f0f9c4deb8fe11d5cbbbff13c
+model_size_bytes: 459803
+model_uuid: m-e6338d3f0f9c4deb8fe11d5cbbbff13c
+prompts: null
+run_id: 6eed3b9e3b9f4f16a4db7e160fd14b55
+utc_time_created: '2025-11-24 12:50:59.562146'
