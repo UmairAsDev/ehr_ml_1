@@ -179,10 +179,10 @@ class FeatureExtraction:
               train_df['complaints_clean'].fillna('') + ' ' +
               train_df['examination_clean'].fillna('')).astype(str)
 
-        tfidf = TfidfVectorizer(ngram_range=(1,2), max_features=10000, min_df=5, stop_words='english')
+        tfidf = TfidfVectorizer(ngram_range=(1,2), max_features=5000, min_df=5, stop_words='english')
         X_text_train = tfidf.fit_transform(train_text)
 
-        svd = TruncatedSVD(n_components=120, random_state=42)
+        svd = TruncatedSVD(n_components=100, random_state=42)
         X_text_train_svd = svd.fit_transform(X_text_train)
 
         os.makedirs('/tmp/preproc', exist_ok=True)
