@@ -1,25 +1,32 @@
 import asyncio
 from db.db import get_db
-from pipeline.get_patient import get_patient_data  
+from pipeline.get_patient import fetch_final_data
+from contextlib import closing
 from app.model_service import ModelService
 
 model_service = ModelService() 
 
-async def predict_patient(patient_id: str):
+def predict_patient(patient_id: str):
     db = next(get_db())
-    notes_df = await get_patient_data(db, [patient_id])
-    
+    notes_df = fetch_final_data(db, patient_id)
+
+    print(f"Fetched {len(notes_df)} notes for patient {patient_id}")
+
     if notes_df.empty:
         return {"patientId": patient_id, "error": "No notes found"}
-    
+
     notes = notes_df.to_dict(orient="records")
     return model_service.predict_patient_notes(notes, patient_id)
 
 
 
+
+
 if __name__ == '__main__':
     from pprint import pprint
-    test_patient_id = "654057"  
-    result = asyncio.run(predict_patient(test_patient_id))
-    
+    import asyncio
+
+    test_patient_id = "185562"
+    result = predict_patient(test_patient_id)
+
     pprint(result)

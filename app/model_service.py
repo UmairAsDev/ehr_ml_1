@@ -33,11 +33,11 @@ class ModelService:
         """
         X, debug = preprocess_single(raw_note, self.tfidf, self.svd, self.scaler)
         
-        # Predict probability & label
+
         proba = float(self.clf.predict_proba(X)[:, 1][0])
         label = int(proba >= 0.5)
         
-        # Risk level
+
         if proba < 0.33:
             risk_level = "Low"
         elif proba < 0.67:
@@ -45,16 +45,16 @@ class ModelService:
         else:
             risk_level = "High"
         
-        # SHAP values (fast, single-row)
+
         shap_values = self.explainer.shap_values(X, check_additivity=False)
         if isinstance(shap_values, list):
-            shap_values = shap_values[1]  # positive class
+            shap_values = shap_values[1]  
         
         shap_values = shap_values.reshape(1, -1)
         abs_vals = np.abs(shap_values[0])
         top_idx = np.argsort(abs_vals)[-5:][::-1]
 
-        # Prepare readable explanations
+
         important_feats = []
         for i in top_idx:
             name = self.feature_names[i]
@@ -95,36 +95,66 @@ class ModelService:
 
     def predict_patient_notes(self, notes: list[dict], patient_id: str):
         """
-        Aggregate prediction for all notes of a patient.
+        notes: list of raw note dicts (same structure as preprocess_single input)
+        returns: patient-level aggregated prediction + sorted list of risky notes
         """
         per_note_results = []
         flare_labels = []
-        flare_probs = []
+        flare_scores = []
 
-        for note in notes:
-            result = self.predict_note(note)
-            per_note_results.append(result)
+        INTERPRETABLE_FEATURES = [
+            "has_psoriasis", "on_steroid_med", "on_biologic",
+            "itch_present", "dry_skin", "plaques_present", "silvery_scale",
+            "elbows_involved", "hyperpigmentation", "smoker", "alcohol_use",
+            "family_melanoma",
+            "complaint_flare_kw", "complaint_no_relief", "flare_in_assessment",
+            "trigger_mentioned", "steroid_started", "has_medications"
+        ]
+
+        for raw in notes:
+            result = self.predict_note(raw)
+            # Only keep interpretable features
+            filtered_influences = [
+                f for f in result["key_influences"] if f["feature"] in INTERPRETABLE_FEATURES
+            ]
+            result_clean = {
+                "noteId": raw.get("noteId"),
+                "noteDate": result.get("noteDate"),
+                "flare_probability": result.get("flare_probability"),
+                "flare_risk_level": result.get("flare_risk_level"),
+                "key_influences": filtered_influences,
+                "text_signals": {f["feature"]: f["impact"] for f in filtered_influences if "complaint" in f["feature"] or "flare" in f["feature"]}
+            }
+            per_note_results.append(result_clean)
             flare_labels.append(result["flare_label"])
-            flare_probs.append(result["flare_probability"])
+            flare_scores.append(result["flare_probability"])
 
-        # Patient-level aggregation
-        if not flare_labels:
-            final_label, final_prob, patient_risk = None, None, "Unknown"
+        # Aggregate patient-level prediction
+        if len(flare_labels) == 0:
+            final_label = None
+            final_probability = None
         else:
-            final_label = int(sum(flare_labels) > len(flare_labels)/2)
-            final_prob = float(np.mean(flare_probs))
-            if final_prob < 0.33:
+            final_label = 1 if sum(flare_labels) > len(flare_labels) / 2 else 0
+            final_probability = float(np.mean(flare_scores))
+
+        if final_probability is not None:
+            if final_probability < 0.33:
                 patient_risk = "Low"
-            elif final_prob < 0.67:
+            elif final_probability < 0.67:
                 patient_risk = "Moderate"
             else:
                 patient_risk = "High"
+        else:
+            patient_risk = "Unknown"
+
+        # Sort notes by probability descending
+        risky_notes_sorted = sorted(per_note_results, key=lambda x: x["flare_probability"], reverse=True)
 
         return {
             "patientId": patient_id,
             "total_notes": len(notes),
             "final_flare_label": final_label,
-            "final_flare_probability": round(final_prob,3) if final_prob is not None else None,
+            "final_flare_probability": round(final_probability, 3) if final_probability is not None else None,
             "final_risk_level": patient_risk,
-            "notes": per_note_results
+            "risky_notes": risky_notes_sorted
         }

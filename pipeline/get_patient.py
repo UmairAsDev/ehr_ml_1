@@ -49,7 +49,7 @@ async def get_patient_ids(db: Session):
     return patient_ids
 
 
-async def fetch_final_data(db: Session, patient_ids: list):
+def fetch_final_data(db, patient_id:str): 
     """Fetch final data for given patient IDs."""
     try:
         final_df = """SELECT
@@ -68,9 +68,9 @@ async def fetch_final_data(db: Session, patient_ids: list):
             LEFT JOIN diagnosis d ON d.dxId = pa.dxId
             LEFT JOIN diagnosisCodes dc ON dc.dxId = d.dxId AND dc.dxCodeId = pa.dxCodeId
             WHERE pn.physicianSignDate IS NOT NULL
-            AND pn.patientId IN (""" + ",".join(patient_ids) + """) AND pn.noteDate >= "2023-01-01 00:00:0000" 
+            AND pn.patientId = :patient_id AND pn.noteDate >= "2023-01-01 00:00:0000" 
             GROUP BY pn.noteId"""
-        final_result =db.execute(text(final_df)).fetchall()
+        final_result =db.execute(text(final_df).bindparams(patient_id=patient_id)).fetchall()
         df = pd.DataFrame(final_result)
         return df
     except Exception as e:
@@ -79,26 +79,11 @@ async def fetch_final_data(db: Session, patient_ids: list):
         return df
 
 
-async def get_patient_data(db: Session, patient_ids: list):
-    """Get patient data for given patient IDs."""
-    try:
-        patient_ids = await get_patient_ids(db)
-        
-        print(f"one patient id: {patient_ids[0]}")
-        patient_id = patient_ids[0]
-        
-        df = await fetch_final_data(db, [patient_id])
-        return df
-    except Exception as e:
-        print(f"An error occurred: {e}")
-        df = pd.DataFrame()
-        return df
-
 
 
 
 
 if __name__ == '__main__':
     db = next(get_db())
-    patient_data = asyncio.run(get_patient_data(db, ['178635']))
+    patient_data = fetch_final_data(db, '178635')
     print(patient_data.head())
