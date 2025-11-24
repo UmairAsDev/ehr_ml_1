@@ -2,32 +2,44 @@ import os
 import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from fastapi import APIRouter
-from app.config import PatientNote
+from db.db import get_db
+from pipeline.get_patient import fetch_final_data
 from app.model_service import ModelService
 from pipeline.mlflow_pipeline import run_pipeline
-import subprocess
 import warnings
 warnings.filterwarnings("ignore")
 
 svc = ModelService()    
-
-
 router  = APIRouter()
 
 
+
+
+
+def predict_patient(patient_id: str):
+    db = next(get_db())
+    notes_df = fetch_final_data(db, patient_id)
+
+    print(f"Fetched {len(notes_df)} notes for patient {patient_id}")
+
+    if notes_df.empty:
+        return {"patientId": patient_id, "error": "No notes found"}
+
+    notes = notes_df.to_dict(orient="records")
+    return svc.predict_patient_notes(notes, patient_id)
+
+
+
+
+
+
+
+
+
 @router.post("/predict")
-async def predict(note: PatientNote):
-    print(note.model_dump())
-    res = svc.predict_note(note.model_dump())
-    return {
-        "patientId": res["patientId"],
-        "noteDate": res["noteDate"],
-        "flare_probability": res["flare_probability"],
-        "flare_label": res["flare_label"],
-        "flare_risk_level": res["flare_risk_level"],
-        "explanation_summary": res["explanation_summary"],
-        "key_influences": res["key_influences"],
-    }
+async def predict(patient_id: str):
+    res = predict_patient(patient_id)
+    return res
 
 
 

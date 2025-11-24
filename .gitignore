@@ -13,10 +13,8 @@ wheels/
 
 uv.lock
 
-*logs
 
 *.csv
 
 .vscode
 .marscode
-mlruns/

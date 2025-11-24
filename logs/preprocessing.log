@@ -1,0 +1,28 @@
+2025-11-24 17:33:17,274 - __main__ - INFO - Starting Feature Extraction...
+2025-11-24 17:33:24,880 - pipeline.preprocessing - INFO - Total patients IDs: 7900
+2025-11-24 17:34:02,409 - pipeline.preprocessing - INFO - Total rows in extracted data: 13884
+2025-11-24 17:34:04,288 - pipeline.preprocessing - INFO - Final data saved to final_data.csv
+2025-11-24 17:34:04,288 - pipeline.preprocessing - INFO - Preprocessing the data....
+2025-11-24 17:34:04,345 - pipeline.preprocessing - INFO - columns after dropping the columns: Index(['noteId', 'provider', 'physician', 'noteDate', 'patientId',
+       'complaints', 'pastHistory', 'assesment', 'reviewofsystem',
+       'currentmedication', 'procedure', 'allergy', 'examination',
+       'patientSummary', 'diagnoses', 'PlaceOfService'],
+      dtype='object')
+2025-11-24 17:34:37,011 - pipeline.preprocessing - INFO - text columns preprocessed: Index(['noteId', 'provider', 'physician', 'noteDate', 'patientId',
+       'complaints', 'pastHistory', 'assesment', 'reviewofsystem',
+       'currentmedication', 'procedure', 'allergy', 'examination',
+       'patientSummary', 'diagnoses', 'PlaceOfService'],
+      dtype='object')
+2025-11-24 17:34:37,512 - pipeline.preprocessing - INFO - Preprocessing completed.
+2025-11-24 17:34:37,680 - __main__ - INFO - Features logged to MLflow.
+2025-11-24 17:34:37,681 - __main__ - INFO - Splitting data and saving preprocessing objects...
+2025-11-24 17:34:37,681 - pipeline.preprocessing - INFO - Ready for splitting and finalizing data preparation.......
+2025-11-24 17:34:37,681 - pipeline.preprocessing - INFO - target column flare_label created.
+2025-11-24 17:34:45,414 - pipeline.preprocessing - INFO - Data split into train and test sets.
+2025-11-24 17:34:45,414 - pipeline.preprocessing - INFO - TF-IDF vocab size: 5000
+2025-11-24 17:34:45,414 - pipeline.preprocessing - INFO - SVD components: (9489, 100)
+2025-11-24 17:34:45,414 - pipeline.preprocessing - INFO - train test split completed.....
+2025-11-24 17:34:45,425 - __main__ - INFO - Training LightGBM model...
+2025-11-24 17:34:51,526 - __main__ - INFO - Model training complete. ROC-AUC = 0.8440
+2025-11-24 17:34:53,916 - __main__ - INFO - Model training complete. ROC-AUC = 0.8440
+2025-11-24 17:34:53,944 - __main__ - INFO - Model and artifacts logged successfully.
