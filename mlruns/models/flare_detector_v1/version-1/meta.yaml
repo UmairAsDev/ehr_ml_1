@@ -1,0 +1,15 @@
+creation_timestamp: 1763987693933
+current_stage: None
+deployment_job_state: null
+description: null
+last_updated_timestamp: 1763987693933
+model_id: m-7127ad46f2e444049240aa0964aa9e9b
+name: flare_detector_v1
+run_id: 8f4d5bbeba144dd89a430b03994da5d4
+run_link: null
+source: models:/m-7127ad46f2e444049240aa0964aa9e9b
+status: READY
+status_message: null
+storage_location: file:///home/umairasdev/Desktop/psoriasis_ML/mlruns/519198706279914348/models/m-7127ad46f2e444049240aa0964aa9e9b/artifacts
+user_id: null
+version: 1
