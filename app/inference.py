@@ -1,4 +1,3 @@
-# inference_preproc.py
 import numpy as np
 import pandas as pd
 from utils.helper import clean_html, mask_post_flare_terms, flag_any
@@ -78,7 +77,7 @@ def preprocess_single(raw_note: dict, tfidf, svd, scaler):
     for col in SAFE_NUMERIC_COLS:
         if col not in df.columns:
             df[col] = 0
-    X_num = df[SAFE_NUMERIC_COLS].fillna(0).astype(float).values  # shape (1, n_num)
+    X_num = df[SAFE_NUMERIC_COLS].fillna(0).astype(float).values
     X_num_scaled = scaler.transform(X_num)
 
     X_final = np.hstack([X_num_scaled, X_text_svd])
