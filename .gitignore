@@ -18,3 +18,7 @@ uv.lock
 
 .vscode
 .marscode
+*.gz
+*.md
+!README.md
+!**/README.md

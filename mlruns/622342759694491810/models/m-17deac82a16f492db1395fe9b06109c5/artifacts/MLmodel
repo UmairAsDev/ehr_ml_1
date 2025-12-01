@@ -1,0 +1,21 @@
+artifact_path: file:///home/umair/projects/ehr_ml_1/mlruns/622342759694491810/models/m-17deac82a16f492db1395fe9b06109c5/artifacts
+flavors:
+  lightgbm:
+    code: null
+    data: model.pkl
+    lgb_version: 4.6.0
+    model_class: lightgbm.sklearn.LGBMClassifier
+  python_function:
+    data: model.pkl
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.lightgbm
+    python_version: 3.10.19
+mlflow_version: 3.6.0
+model_id: m-17deac82a16f492db1395fe9b06109c5
+model_size_bytes: 244421
+model_uuid: m-17deac82a16f492db1395fe9b06109c5
+prompts: null
+run_id: 32af71ea4070426889926442fb613dbf
+utc_time_created: '2025-11-27 09:21:44.038327'
