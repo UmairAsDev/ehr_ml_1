@@ -1,0 +1,10 @@
+artifact_location: file:///home/umair/projects/ehr_ml_1/mlruns/571453331324984271/models/m-5bae9a82df7b422ca815b1430bf46213/artifacts
+creation_timestamp: 1764768138813
+experiment_id: '571453331324984271'
+last_updated_timestamp: 1764768141834
+model_id: m-5bae9a82df7b422ca815b1430bf46213
+model_type: null
+name: model
+source_run_id: fd7332789f774e68a3cc1273ef756598
+status: 2
+status_message: null

@@ -23,13 +23,13 @@ import traceback
 
 warnings.filterwarnings("ignore")
 
-# Configure logging
+
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
 logger = logging.getLogger(__name__)
 
-# Initialize model service
+
 try:
     svc = ModelService()
     logger.info("✓ Model service initialized successfully")
@@ -38,23 +38,6 @@ except Exception as e:
     svc = None
 
 router = APIRouter()
-
-
-# Exception handlers
-@router.exception_handler(Exception)
-async def global_exception_handler(request: Request, exc: Exception):
-    """Global exception handler for unhandled errors."""
-    logger.error(f"Unhandled exception: {str(exc)}")
-    logger.error(traceback.format_exc())
-
-    return JSONResponse(
-        status_code=500,
-        content={
-            "error": "Internal server error",
-            "detail": str(exc),
-            "status_code": 500,
-        },
-    )
 
 
 def predict_patient(patient_id: str):
@@ -95,7 +78,6 @@ def predict_patient(patient_id: str):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-# Health check endpoints
 @router.get("/health", response_model=HealthResponse)
 async def health_check():
     """
@@ -123,7 +105,6 @@ async def ping():
     return await health_check()
 
 
-# Prediction endpoints
 @router.post("/predict", response_model=PatientPredictionResponse)
 async def predict(request: PredictRequest):
     """
@@ -146,40 +127,40 @@ async def predict(request: PredictRequest):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.post("/predict_batch")
-async def predict_batch(request: BatchPredictRequest):
-    """
-    Batch prediction for multiple patient notes.
+# @router.post("/predict_batch")
+# async def predict_batch(request: BatchPredictRequest):
+#     """
+#     Batch prediction for multiple patient notes.
 
-    Args:
-        request: Batch prediction request with notes
+#     Args:
+#         request: Batch prediction request with notes
 
-    Returns:
-        List of predictions
-    """
-    try:
-        logger.info(f"Batch prediction request for {len(request.notes)} notes")
+#     Returns:
+#         List of predictions
+#     """
+#     try:
+#         logger.info(f"Batch prediction request for {len(request.notes)} notes")
 
-        if svc is None:
-            raise HTTPException(status_code=503, detail="Model service not initialized")
+#         if svc is None:
+#             raise HTTPException(status_code=503, detail="Model service not initialized")
 
-        results = []
-        for note in request.notes:
-            try:
-                result = svc.predict_note(note.dict())
-                results.append(result)
-            except Exception as e:
-                logger.error(f"Failed to predict note {note.noteId}: {str(e)}")
-                results.append({"noteId": note.noteId, "error": str(e)})
+#         results = []
+#         for note in request.notes:
+#             try:
+#                 result = svc.predict_note(note.dict())
+#                 results.append(result)
+#             except Exception as e:
+#                 logger.error(f"Failed to predict note {note.noteId}: {str(e)}")
+#                 results.append({"noteId": note.noteId, "error": str(e)})
 
-        logger.info(f"Batch prediction completed: {len(results)} results")
-        return {"predictions": results}
+#         logger.info(f"Batch prediction completed: {len(results)} results")
+#         return {"predictions": results}
 
-    except HTTPException:
-        raise
-    except Exception as e:
-        logger.error(f"Batch prediction failed: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
+#     except HTTPException:
+#         raise
+#     except Exception as e:
+#         logger.error(f"Batch prediction failed: {str(e)}")
+#         raise HTTPException(status_code=500, detail=str(e))
 
 
 @router.post("/train", response_model=TrainResponse)

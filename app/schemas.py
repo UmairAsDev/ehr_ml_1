@@ -14,10 +14,8 @@ class PatientNote(BaseModel):
     noteId: Optional[str] = Field(None, description="Note identifier")
     noteDate: Optional[str] = Field(None, description="Date of the note (YYYY-MM-DD)")
 
-    # Patient summary
     patientSummary: Optional[str] = Field("", description="Patient summary information")
 
-    # Clinical text fields
     complaints: Optional[str] = Field("", description="Chief complaints")
     assesment: Optional[str] = Field("", description="Clinical assessment")
     examination: Optional[str] = Field("", description="Physical examination findings")
@@ -50,9 +48,6 @@ class PredictRequest(BaseModel):
     """Schema for single prediction request."""
 
     patient_id: str = Field(..., description="Patient identifier", alias="patientId")
-
-    class Config:
-        schema_extra = {"example": {"patient_id": "PAT001"}}
 
 
 class BatchPredictRequest(BaseModel):

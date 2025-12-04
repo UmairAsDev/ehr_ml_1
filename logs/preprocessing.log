@@ -1,84 +1,31 @@
-2025-11-24 17:33:17,274 - __main__ - INFO - Starting Feature Extraction...
-2025-11-24 17:33:24,880 - pipeline.preprocessing - INFO - Total patients IDs: 7900
-2025-11-24 17:34:02,409 - pipeline.preprocessing - INFO - Total rows in extracted data: 13884
-2025-11-24 17:34:04,288 - pipeline.preprocessing - INFO - Final data saved to final_data.csv
-2025-11-24 17:34:04,288 - pipeline.preprocessing - INFO - Preprocessing the data....
-2025-11-24 17:34:04,345 - pipeline.preprocessing - INFO - columns after dropping the columns: Index(['noteId', 'provider', 'physician', 'noteDate', 'patientId',
+2025-12-03 18:19:50,353 - app.main - ERROR - Failed to initialize model service: Registered Model with name=flare_detector_v1 not found
+2025-12-03 18:20:01,859 - app.main - INFO - Starting model training pipeline
+2025-12-03 18:20:01,928 - pipeline.mlflow_pipeline - INFO - Starting Feature Extraction...
+2025-12-03 18:20:14,302 - pipeline.preprocessing - INFO - Total patients IDs: 7962
+2025-12-03 18:20:53,124 - pipeline.preprocessing - INFO - Total rows in extracted data: 14120
+2025-12-03 18:20:56,134 - pipeline.preprocessing - INFO - Final data saved to final_data.csv
+2025-12-03 18:20:56,135 - pipeline.preprocessing - INFO - Preprocessing the data....
+2025-12-03 18:20:56,236 - pipeline.preprocessing - INFO - columns after dropping the columns: Index(['noteId', 'provider', 'physician', 'noteDate', 'patientId',
        'complaints', 'pastHistory', 'assesment', 'reviewofsystem',
        'currentmedication', 'procedure', 'allergy', 'examination',
        'patientSummary', 'diagnoses', 'PlaceOfService'],
       dtype='object')
-2025-11-24 17:34:37,011 - pipeline.preprocessing - INFO - text columns preprocessed: Index(['noteId', 'provider', 'physician', 'noteDate', 'patientId',
+2025-12-03 18:21:38,501 - pipeline.preprocessing - INFO - text columns preprocessed: Index(['noteId', 'provider', 'physician', 'noteDate', 'patientId',
        'complaints', 'pastHistory', 'assesment', 'reviewofsystem',
        'currentmedication', 'procedure', 'allergy', 'examination',
        'patientSummary', 'diagnoses', 'PlaceOfService'],
       dtype='object')
-2025-11-24 17:34:37,512 - pipeline.preprocessing - INFO - Preprocessing completed.
-2025-11-24 17:34:37,680 - __main__ - INFO - Features logged to MLflow.
-2025-11-24 17:34:37,681 - __main__ - INFO - Splitting data and saving preprocessing objects...
-2025-11-24 17:34:37,681 - pipeline.preprocessing - INFO - Ready for splitting and finalizing data preparation.......
-2025-11-24 17:34:37,681 - pipeline.preprocessing - INFO - target column flare_label created.
-2025-11-24 17:34:45,414 - pipeline.preprocessing - INFO - Data split into train and test sets.
-2025-11-24 17:34:45,414 - pipeline.preprocessing - INFO - TF-IDF vocab size: 5000
-2025-11-24 17:34:45,414 - pipeline.preprocessing - INFO - SVD components: (9489, 100)
-2025-11-24 17:34:45,414 - pipeline.preprocessing - INFO - train test split completed.....
-2025-11-24 17:34:45,425 - __main__ - INFO - Training LightGBM model...
-2025-11-24 17:34:51,526 - __main__ - INFO - Model training complete. ROC-AUC = 0.8440
-2025-11-24 17:34:53,916 - __main__ - INFO - Model training complete. ROC-AUC = 0.8440
-2025-11-24 17:34:53,944 - __main__ - INFO - Model and artifacts logged successfully.
-2025-11-24 17:49:03,506 - pipeline.mlflow_pipeline - INFO - Starting Feature Extraction...
-2025-11-24 17:49:11,512 - pipeline.preprocessing - INFO - Total patients IDs: 7900
-2025-11-24 17:50:06,037 - pipeline.preprocessing - INFO - Total rows in extracted data: 13884
-2025-11-24 17:50:08,376 - pipeline.preprocessing - INFO - Final data saved to final_data.csv
-2025-11-24 17:50:08,377 - pipeline.preprocessing - INFO - Preprocessing the data....
-2025-11-24 17:50:08,473 - pipeline.preprocessing - INFO - columns after dropping the columns: Index(['noteId', 'provider', 'physician', 'noteDate', 'patientId',
-       'complaints', 'pastHistory', 'assesment', 'reviewofsystem',
-       'currentmedication', 'procedure', 'allergy', 'examination',
-       'patientSummary', 'diagnoses', 'PlaceOfService'],
-      dtype='object')
-2025-11-24 17:50:47,705 - pipeline.preprocessing - INFO - text columns preprocessed: Index(['noteId', 'provider', 'physician', 'noteDate', 'patientId',
-       'complaints', 'pastHistory', 'assesment', 'reviewofsystem',
-       'currentmedication', 'procedure', 'allergy', 'examination',
-       'patientSummary', 'diagnoses', 'PlaceOfService'],
-      dtype='object')
-2025-11-24 17:50:48,249 - pipeline.preprocessing - INFO - Preprocessing completed.
-2025-11-24 17:50:48,384 - pipeline.mlflow_pipeline - INFO - Features logged to MLflow.
-2025-11-24 17:50:48,384 - pipeline.mlflow_pipeline - INFO - Splitting data and saving preprocessing objects...
-2025-11-24 17:50:48,384 - pipeline.preprocessing - INFO - Ready for splitting and finalizing data preparation.......
-2025-11-24 17:50:48,385 - pipeline.preprocessing - INFO - target column flare_label created.
-2025-11-24 17:50:57,808 - pipeline.preprocessing - INFO - Data split into train and test sets.
-2025-11-24 17:50:57,808 - pipeline.preprocessing - INFO - TF-IDF vocab size: 5000
-2025-11-24 17:50:57,808 - pipeline.preprocessing - INFO - SVD components: (9489, 100)
-2025-11-24 17:50:57,808 - pipeline.preprocessing - INFO - train test split completed.....
-2025-11-24 17:50:57,819 - pipeline.mlflow_pipeline - INFO - Training LightGBM model...
-2025-11-24 17:50:59,533 - pipeline.mlflow_pipeline - INFO - Model training complete. ROC-AUC = 0.8440
-2025-11-24 17:51:02,037 - pipeline.mlflow_pipeline - INFO - Model training complete. ROC-AUC = 0.8440
-2025-11-24 17:51:02,059 - pipeline.mlflow_pipeline - INFO - Model and artifacts logged successfully.
-2025-11-27 14:19:12,346 - __main__ - INFO - Starting Feature Extraction...
-2025-11-27 14:19:23,770 - pipeline.preprocessing - INFO - Total patients IDs: 7937
-2025-11-27 14:20:10,632 - pipeline.preprocessing - INFO - Total rows in extracted data: 14006
-2025-11-27 14:20:13,482 - pipeline.preprocessing - INFO - Final data saved to final_data.csv
-2025-11-27 14:20:13,482 - pipeline.preprocessing - INFO - Preprocessing the data....
-2025-11-27 14:20:13,564 - pipeline.preprocessing - INFO - columns after dropping the columns: Index(['noteId', 'provider', 'physician', 'noteDate', 'patientId',
-       'complaints', 'pastHistory', 'assesment', 'reviewofsystem',
-       'currentmedication', 'procedure', 'allergy', 'examination',
-       'patientSummary', 'diagnoses', 'PlaceOfService'],
-      dtype='object')
-2025-11-27 14:21:00,872 - pipeline.preprocessing - INFO - text columns preprocessed: Index(['noteId', 'provider', 'physician', 'noteDate', 'patientId',
-       'complaints', 'pastHistory', 'assesment', 'reviewofsystem',
-       'currentmedication', 'procedure', 'allergy', 'examination',
-       'patientSummary', 'diagnoses', 'PlaceOfService'],
-      dtype='object')
-2025-11-27 14:21:01,542 - pipeline.preprocessing - INFO - Preprocessing completed.
-2025-11-27 14:21:01,786 - __main__ - INFO - Features logged to MLflow.
-2025-11-27 14:21:01,786 - __main__ - INFO - Splitting data and saving preprocessing objects...
-2025-11-27 14:21:01,786 - pipeline.preprocessing - INFO - Ready for splitting and finalizing data preparation.......
-2025-11-27 14:21:01,787 - pipeline.preprocessing - INFO - target column flare_label created.
-2025-11-27 14:21:14,095 - pipeline.preprocessing - INFO - Data split into train and test sets.
-2025-11-27 14:21:14,095 - pipeline.preprocessing - INFO - TF-IDF vocab size: 5000
-2025-11-27 14:21:14,095 - pipeline.preprocessing - INFO - SVD components: (9370, 100)
-2025-11-27 14:21:14,095 - pipeline.preprocessing - INFO - train test split completed.....
-2025-11-27 14:21:14,118 - __main__ - INFO - Training LightGBM model...
-2025-11-27 14:21:43,970 - __main__ - INFO - Model training complete. ROC-AUC = 0.8606
-2025-11-27 14:21:48,135 - __main__ - INFO - Model training complete. ROC-AUC = 0.8606
-2025-11-27 14:21:48,178 - __main__ - INFO - Model and artifacts logged successfully.
+2025-12-03 18:21:39,073 - pipeline.preprocessing - INFO - Preprocessing completed.
+2025-12-03 18:21:39,258 - pipeline.mlflow_pipeline - INFO - Features logged to MLflow.
+2025-12-03 18:21:39,258 - pipeline.mlflow_pipeline - INFO - Splitting data and saving preprocessing objects...
+2025-12-03 18:21:39,258 - pipeline.preprocessing - INFO - Ready for splitting and finalizing data preparation.......
+2025-12-03 18:21:39,259 - pipeline.preprocessing - INFO - target column flare_label created.
+2025-12-03 18:21:50,655 - pipeline.preprocessing - INFO - Data split into train and test sets.
+2025-12-03 18:21:50,656 - pipeline.preprocessing - INFO - TF-IDF vocab size: 5000
+2025-12-03 18:21:50,656 - pipeline.preprocessing - INFO - SVD components: (9481, 100)
+2025-12-03 18:21:50,656 - pipeline.preprocessing - INFO - train test split completed.....
+2025-12-03 18:21:50,675 - pipeline.mlflow_pipeline - INFO - Training LightGBM model...
+2025-12-03 18:22:18,789 - pipeline.mlflow_pipeline - INFO - Model training complete. ROC-AUC = 0.8989
+2025-12-03 18:22:21,837 - pipeline.mlflow_pipeline - INFO - Model training complete. ROC-AUC = 0.8989
+2025-12-03 18:22:21,856 - pipeline.mlflow_pipeline - INFO - Model and artifacts logged successfully.
+2025-12-03 18:22:21,878 - app.main - INFO - Model training completed successfully

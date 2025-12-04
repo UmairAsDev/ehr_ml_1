@@ -1,6 +1,0 @@
-artifact_location: file:///home/umair/projects/ehr_ml_1/mlruns/622342759694491810
-creation_time: 1764235082247
-experiment_id: '622342759694491810'
-last_update_time: 1764235082247
-lifecycle_stage: active
-name: flare_detection_pipeline

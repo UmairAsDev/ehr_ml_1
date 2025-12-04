@@ -1,0 +1,14 @@
+artifact_uri: file:///home/umair/projects/ehr_ml_1/mlruns/571453331324984271/fd7332789f774e68a3cc1273ef756598/artifacts
+end_time: 1764768141856
+entry_point_name: ''
+experiment_id: '571453331324984271'
+lifecycle_stage: active
+run_id: fd7332789f774e68a3cc1273ef756598
+run_name: feature_extraction_and_training
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1764768001917
+status: 3
+tags: []
+user_id: umair

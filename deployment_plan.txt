@@ -1,0 +1,98 @@
+# Master Deployment Plan: Psoriasis Flare Prediction System
+
+## 1. Architecture Overview
+- **Application**: FastAPI (Python 3.8+)
+- **Model**: LightGBM (loaded via MLflow)
+- **Server**: Ubuntu Linux (35.170.19.219)
+- **Process Manager**: Systemd (ensures 24/7 uptime)
+- **Port**: 8000
+
+## 2. Prerequisites
+- **SSH Access**: Root access to `35.170.19.219`
+- **Model Artifacts**: The `mlruns` directory MUST be present on the server.
+- **Python Compatibility**: Code is optimized for Python 3.8.
+
+## 3. Deployment Workflow
+
+### Phase 1: Preparation (Local)
+1.  **Verify Code**: Ensure `main.py` has the exception handler (Fixed).
+2.  **Verify Requirements**: Use `requirements-py38.txt` for server compatibility.
+3.  **Package Files**: We will transfer `app`, `pipeline`, `utils`, `db`, `sagemaker`, `main.py`, and `mlruns`.
+
+### Phase 2: Server Setup (Remote)
+1.  **Install System Deps**: `python3-pip`, `python3-venv`, `git`, `sshpass`.
+2.  **Clean Install**: Remove any old `ehr_ml_1` directory to ensure a fresh start.
+
+### Phase 3: File Transfer
+1.  **Method**: `rsync` is preferred for speed and reliability.
+2.  **Content**: Sync everything except `.venv` and `.git`.
+
+### Phase 4: Application Startup
+1.  **Virtual Env**: Create `.venv` and install dependencies.
+2.  **Service Config**: Create `/etc/systemd/system/ehr-ml.service`.
+3.  **Launch**: Enable and start the service.
+
+## 4. Verification & Maintenance
+- **Health Check**: `curl http://localhost:8000/health`
+- **Logs**: `journalctl -u ehr-ml.service -f`
+- **Updates**: To update code, re-run the sync command and restart the service.
+
+---
+
+## 5. Execution Commands (Copy-Paste)
+
+### Step 1: Clean & Prepare Server
+```bash
+ssh root@35.170.19.219 "systemctl stop ehr-ml.service; rm -rf /root/ehr_ml_1; mkdir -p /root/ehr_ml_1"
+```
+
+### Step 2: Upload Project (Run Locally)
+```bash
+# Run this from your local project root
+sshpass -p 'DongaGali@002' rsync -avz --progress \
+    --exclude='.venv' \
+    --exclude='__pycache__' \
+    --exclude='.git' \
+    ./ root@35.170.19.219:/root/ehr_ml_1/
+```
+
+### Step 3: Install & Start (Run on Server)
+```bash
+ssh root@35.170.19.219 << 'EOF'
+cd /root/ehr_ml_1
+apt update && apt install -y python3-pip python3-venv
+
+# Setup Python
+python3 -m venv .venv
+source .venv/bin/activate
+pip install --upgrade pip
+pip install -r requirements-py38.txt
+
+# Setup Service
+cat > /etc/systemd/system/ehr-ml.service << 'SERVICE'
+[Unit]
+Description=EHR ML API
+After=network.target
+
+[Service]
+User=root
+WorkingDirectory=/root/ehr_ml_1
+Environment="PATH=/root/ehr_ml_1/.venv/bin"
+ExecStart=/root/ehr_ml_1/.venv/bin/python main.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+SERVICE
+
+# Start
+systemctl daemon-reload
+systemctl enable ehr-ml.service
+systemctl restart ehr-ml.service
+EOF
+```
+
+### Step 4: Verify
+```bash
+ssh root@35.170.19.219 "curl -v http://localhost:8000/health"
+```

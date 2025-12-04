@@ -1,0 +1,234 @@
+# 📘 Complete Deployment Manual: Psoriasis Flare Prediction System
+
+**Target Server:** `35.170.19.219`
+**User:** `root`
+**Password:** `DongaGali@002`
+
+---
+
+## 🚀 Option 1: The "One-Click" Deployment (Easiest)
+
+I have created a script called `deploy.sh` in your project folder. This is the fastest way to deploy.
+
+**Command:**
+```bash
+# Run this from your local terminal inside the project folder
+./deploy.sh
+```
+
+**What this does:**
+1. Uploads all your code and model files to the server.
+2. Installs Python and necessary libraries on the server.
+3. Sets up the application to run automatically (even after server restart).
+4. Restarts the application.
+
+---
+
+## 🛠️ Option 2: Manual Deployment (Step-by-Step)
+
+If you want to have full control or do it manually, follow these exact commands.
+
+### Phase 1: Connect to Server
+Open your terminal (or MobaXterm) and run:
+```bash
+ssh root@35.170.19.219
+# When prompted, enter password: DongaGali@002
+```
+
+### Phase 2: Prepare the Server (Run these ON the server)
+Install the necessary system software:
+```bash
+apt update
+apt install -y python3-pip python3-venv git sshpass
+```
+
+Create the project folder:
+```bash
+mkdir -p /root/ehr_ml_1
+cd /root/ehr_ml_1
+```
+
+### Phase 3: Upload Code (Run these on YOUR LOCAL machine)
+Open a **new terminal window** on your computer (do not close the SSH one). Navigate to your project folder and upload the files.
+
+**Method A: Using `rsync` (Recommended for Linux/Mac/MobaXterm local terminal)**
+```bash
+# This command syncs your folder to the server
+sshpass -p 'DongaGali@002' rsync -avz --progress \
+    --exclude='.venv' \
+    --exclude='__pycache__' \
+    --exclude='.git' \
+    --exclude='*.md' \
+    --exclude='*log' \
+    ./ root@35.170.19.219:/root/ehr_ml_1/
+```
+
+**Method B: Using `scp` (If rsync fails)**
+```bash
+# Upload requirements file
+sshpass -p 'DongaGali@002' scp requirements-py38.txt root@35.170.19.219:/root/ehr_ml_1/
+# Upload main application files
+sshpass -p 'DongaGali@002' scp -r app pipeline utils db sagemaker main.py root@35.170.19.219:/root/ehr_ml_1/
+# Upload model files (Important!)
+sshpass -p 'DongaGali@002' scp -r mlruns root@35.170.19.219:/root/ehr_ml_1/
+```
+
+### Phase 4: Install Dependencies (Run ON the server)
+Back in your SSH session on the server:
+
+```bash
+cd /root/ehr_ml_1
+
+# 1. Create virtual environment
+python3 -m venv .venv
+
+# 2. Activate it
+source .venv/bin/activate
+
+# 3. Install libraries (Use the py38 file I created for compatibility)
+pip install --upgrade pip
+pip install -r requirements-py38.txt
+```
+
+### Phase 5: Setup Background Service (Run ON the server)
+To make sure the app runs 24/7, we use `systemd`.
+
+1. **Create the service file:**
+```bash
+cat > /etc/systemd/system/ehr-ml.service << 'EOF'
+[Unit]
+Description=EHR ML Psoriasis Prediction API
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/root/ehr_ml_1
+Environment="PATH=/root/ehr_ml_1/.venv/bin"
+ExecStart=/root/ehr_ml_1/.venv/bin/python main.py
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
+EOF
+```
+
+2. **Start the service:**
+```bash
+systemctl daemon-reload
+systemctl enable ehr-ml.service
+systemctl restart ehr-ml.service
+```
+
+---
+
+## 🚦 Managing the Server (Start, Stop, Logs)
+
+Here are the commands you need to manage the application day-to-day.
+
+### Check if it's running
+```bash
+systemctl status ehr-ml.service
+```
+*Look for "Active: active (running)" in green.*
+
+### View Live Logs (Real-time error checking)
+```bash
+journalctl -u ehr-ml.service -f
+```
+*Press `Ctrl+C` to exit.*
+
+### Restart the App (After code changes)
+```bash
+systemctl restart ehr-ml.service
+```
+
+### Stop the App
+```bash
+systemctl stop ehr-ml.service
+```
+
+---
+
+## ❓ Troubleshooting Common Errors
+
+### 🔴 Error: "Internal Server Error" (500)
+1. Check the logs: `journalctl -u ehr-ml.service -n 50`
+2. Look for the Python traceback.
+3. Common cause: Missing model files. Ensure `mlruns` folder is uploaded.
+
+### 🔴 Error: "Address already in use"
+This means the app is trying to start but port 8000 is taken.
+**Fix:**
+```bash
+# Find what's using port 8000
+lsof -i :8000
+# Kill it (replace PID with the number you see)
+kill -9 <PID>
+# Restart service
+systemctl restart ehr-ml.service
+```
+
+### 🔴 Error: "Module not found"
+**Fix:**
+```bash
+cd /root/ehr_ml_1
+source .venv/bin/activate
+pip install -r requirements-py38.txt
+systemctl restart ehr-ml.service
+```
+
+---
+
+## 🧪 How to Test Your API
+
+**Health Check:**
+```bash
+curl http://35.170.19.219:8000/health
+```
+
+**Test Prediction:**
+```bash
+curl -X POST "http://35.170.19.219:8000/predict" \
+     -H "Content-Type: application/json" \
+     -d '{"patient_id": "test_patient_123"}'
+
+---
+
+## 🆔 Server Identification & Control
+
+### How to Check Server Details
+Run these commands after logging in to see which server you are on:
+
+```bash
+# 1. See OS and Version
+cat /etc/os-release
+
+# 2. See Hostname
+hostname
+
+# 3. See IP Addresses
+hostname -I
+```
+
+### How to Start/Stop the Application
+You can turn the application on or off whenever you want without affecting the server itself.
+
+**To STOP the application:**
+```bash
+systemctl stop ehr-ml.service
+```
+
+**To START the application:**
+```bash
+systemctl start ehr-ml.service
+```
+
+**To RESTART (if you made changes):**
+```bash
+systemctl restart ehr-ml.service
+```
+
+**⚠️ WARNING:** Never run `shutdown` or `poweroff` unless you have access to the AWS/Cloud Console to turn the machine back on! SSH access will be lost if you shut down the server.
+```
